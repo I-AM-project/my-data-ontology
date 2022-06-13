@@ -13,7 +13,7 @@ mapping_file = './dev/mapping-mydata_org-mdo.csv'
 conforming_triples_output = './output/my-data-instances.ttl'
 ##################################################
 
-
+# Please Fix This
 
 def createTriples(mapping, data_value):
     try:
@@ -21,13 +21,18 @@ def createTriples(mapping, data_value):
         triple_index = 0
         iter_count = 1
         while triple_index < len(mapping):
+            rdf_type = mapping[triple_index]
+            instance = mapping[triple_index] + "_SOMEGUID "
+           
             if mapping[triple_index] == "":
                 break
-
-            # print(iter_count % 3, triple_index, mapping[triple_index])
+            
+            # Uses mod to create the triples
             if  iter_count  % 3 == 0:
-                conforming_triples += " " + mapping[triple_index] + ". \n" 
+                conforming_triples += " " + instance + " rdf:type " +  rdf_type + ".\n"
+                conforming_triples += " " + instance + ". \n" 
             else:
+                conforming_triples += " " + instance + " rdf:type " +  rdf_type + ".\n"
                 conforming_triples += " " + mapping[triple_index]
                 triple_index += 1
 
@@ -59,11 +64,11 @@ def main():
                     attribute = headers[index]
                     data_value = col
                     if attribute not in my_data_map.keys(): # Check the map covers the terms 
-                        print("There is not mapping for: " + attribute)
+                        print("There is no mapping for: " + attribute)
                     else: 
                         mapping =  my_data_map[attribute]
                         
-                        output_file.write(createTriples(mapping,data_value ))
+                        output_file.write(createTriples(mapping,data_value))
             
         output_file.close()               
     
